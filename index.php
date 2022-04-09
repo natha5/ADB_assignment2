@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html>
+
+	<head>
+		<title>Database interface</title>
+		<link   rel="stylesheet" href="style.css">
+	</head>
+
 	<body>
 		<form>
 			<h2>Add new employee<h2>
