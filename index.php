@@ -226,19 +226,19 @@
 					INSERT INTO Department (deptno,dname,loc) VALUES (30,'Sales','Chicago');
 					INSERT INTO Department (deptno,dname,loc) VALUES (40,'Operations','Boston');
 
-					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7369,'Smith','Clerk',7902,'17-dec-80',800,null,20);
-					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7499,'Allen','Salesman',7698,'20-feb-81',1600,300,30);
-					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7521,'Ward','Salesman',7698,'22-feb-81',1250,500,30);
-					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7566,'Jones','Manager',7839,'02-apr-81',2975,null,20);
-					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7654,'Martin','Salesman',7698,'28-sep-81',1250,1400,30);
-					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7698,'Blake','Manager',7839,'01-may-81',2850,null,30);
-					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7782,'Clark','Manager',7839,'09-jun-81',2450,null,10);
-					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7839,'King','President',null,'17-nov-81',5000,null,10);
-					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7844,'Turner','Salesman',7698,'08-sep-81',1500,0,30);
-					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7876,'Adams','Clerk',7788,'23-sep-87',1100,null,20);
-					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7900,'James','Clerk',7698,'03-dec-81',950,null,30);
-					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7902,'Ford','Analyst',7566,'03-dec-81',3000,null,20);
-					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7934,'Miller','Clerk',7782,'23-jan-82',1300,null,10);
+					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7369,'Smith','Clerk',7902,'1980-12-17',800,null,20);
+					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7499,'Allen','Salesman',7698,'1981-02-20',1600,300,30);
+					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7521,'Ward','Salesman',7698,'1981-02-22',1250,500,30);
+					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7566,'Jones','Manager',7839,'1981-04-02',2975,null,20);
+					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7654,'Martin','Salesman',7698,'1981-09-28',1250,1400,30);
+					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7698,'Blake','Manager',7839,'1981-05-01',2850,null,30);
+					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7782,'Clark','Manager',7839,'1981-06-09',2450,null,10);
+					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7839,'King','President',null,'981-11-17',5000,null,10);
+					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7844,'Turner','Salesman',7698,'1981-09-08',1500,0,30);
+					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7876,'Adams','Clerk',7788,'1987-09-23',1100,null,20);
+					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7900,'James','Clerk',7698,'1981-12-03',950,null,30);
+					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7902,'Ford','Analyst',7566,'1981-12-03',3000,null,20);
+					INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7934,'Miller','Clerk',7782,'1982-01-23',1300,null,10);
 				";
 
 				$resultCreate = $con->prepare($sql);
