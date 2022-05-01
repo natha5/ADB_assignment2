@@ -3,7 +3,7 @@
 
 	<head>
 		<title>Database interface</title>
-		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="style.css?<?php echo time(); /*this is done so that css reloads and is not cached*/ ?>" type="text/css">
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 		<!--jQuery -->
@@ -57,151 +57,148 @@
 		</script>
 	</head>
 
-	<body>
-		<div class="px-4">
-			<div class="row mt-4">
-				<div class="col-2">
-					<button type="button" class="btn btn-danger" id="resetButton" onclick="resetDB()">Reset Database</button>
-					<hr>
-					<h3>Select:</h3>
-					<p class="mb-0"><a href="?select=employee">Employee</a></p>
-					<p class="mb-0"><a href="?select=department">Department</a></p>
-					<hr class="mt-4">
-					<h3>Queries:</h3>
-					<p class="mb-0"><a href="?q=query_1">Query 1</a></p>
-					<p class="mb-0"><a href="?q=query_2">Query 2</a></p>
-					<p class="mb-0"><a href="?q=query_3">Query 3</a></p>
+	<body class="full-height">
+		<div class="row h-100 full-height">
+			<div class="col-2 bg-grey ps-4 pt-4 full-height">
+				<button type="button" class="btn btn-danger" id="resetButton" onclick="resetDB()">Reset Database</button>
+				<hr>
+				<h3>Select:</h3>
+				<p class="mb-0"><a href="?select=employee">Employee</a></p>
+				<p class="mb-0"><a href="?select=department">Department</a></p>
+				<hr class="mt-4">
+				<h3>Queries:</h3>
+				<p class="mb-0"><a href="?q=query_1">Query 1</a></p>
+				<p class="mb-0"><a href="?q=query_2">Query 2</a></p>
+				<p class="mb-0"><a href="?q=query_3">Query 3</a></p>
 
-				</div>
-				<div class="col-8 px-3">
-					<?php
-						require 'connect.php';
-						if($con == null){
-							echo "<h4 class='alert alert-danger'>Could not connect to the database.</h4>";
+			</div>
+			<div class="col-8 px-3 pt-4">
+				<?php
+					require 'connect.php';
+					if($con == null){
+						echo "<h4 class='alert alert-danger'>Could not connect to the database.</h4>";
+					}
+					else if(isset($_GET['select'])){
+						// refactored and dynamically created solution
+						// get column names for the selected table
+						$sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '".$_GET['select']."'";
+						$colsResult = $con->prepare($sql);
+						$colsResult->execute();
+						$colNames = [];
+						if($colsResult){
+							while($row = $colsResult->fetch(PDO::FETCH_ASSOC)){
+								array_push($colNames, $row['COLUMN_NAME']);
+							}
 						}
-						else if(isset($_GET['select'])){
-							// refactored and dynamically created solution
-							// get column names for the selected table
-							$sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '".$_GET['select']."'";
-							$colsResult = $con->prepare($sql);
-							$colsResult->execute();
-							$colNames = [];
-							if($colsResult){
-								while($row = $colsResult->fetch(PDO::FETCH_ASSOC)){
-									array_push($colNames, $row['COLUMN_NAME']);
+
+						// set page title
+						if($_GET['select'] == 'employee'){
+							echo "<h1 class='mb-4'>Employee Table</h1>";
+						}
+						else if($_GET['select'] == 'department'){
+							echo "<h1 class='mb-4'>Department Table</h1>";
+						}
+
+						//draw respective table
+						$sql = "SELECT * FROM ".$_GET['select'];
+						$result = $con->prepare($sql);
+						$result->execute();
+						if($result){
+							echo "<table class='table table-striped'>";
+							echo "<thead><tr class='table-danger'>";
+							$i = 0;
+							foreach($colNames as $col){
+								//write # with the name of the first column (primary key)
+								if($i == 0){
+									echo "<th scope='col'>#".$col."</th>";
 								}
+								else{
+									echo "<th scope='col'>".$col."</th>";
+								}
+								$i++;
 							}
+									
+							echo "</tr></thead>";
+							echo "<tbody>";
+							while($row = $result->fetch(PDO::FETCH_ASSOC)){
+								echo "<tr>";
+								foreach($colNames as $col){
+									//IDK if it is better to write NULL or leave entry empty
+									if(!isset($row[$col])){
+										echo "<td class='fst-italic fw-lighter text-muted'>NULL</td>";
+									}
+									else{
+										echo "<td>".$row[$col]."</td>";
+									}
+								}
+								//"<td>".$row["empno"]."</td><td>".$row["ename"]."</td><td>".$row["job"]."</td><td>".$row["mgr"]."</td><td>".$row["hiredate"]."</td><td>".$row["sal"]."</td><td>".$row["comm"]."</td><td>".$row["deptno"]."</td>"
+								
+								echo "</tr>";
+							}
+							echo "</tbody></table>";
+						}
 
-							// set page title
-							if($_GET['select'] == 'employee'){
-								echo "<h1 class='mb-4'>Employee Table</h1>";
-							}
-							else if($_GET['select'] == 'department'){
-								echo "<h1 class='mb-4'>Department Table</h1>";
-							}
 
-							//draw respective table
-							$sql = "SELECT * FROM ".$_GET['select'];
+						//not refactored and hard coded solution
+						if($_GET['select'] == 'employee'){
+							echo "<h1 class='mb-4'>Employee Table</h1>";
+
+							$sql = "SELECT * FROM employee";
 							$result = $con->prepare($sql);
 							$result->execute();
 							if($result){
 								echo "<table class='table table-striped'>";
-								echo "<thead><tr class='table-danger'>";
-								$i = 0;
-								foreach($colNames as $col){
-									//write # with the name of the first column (primary key)
-									if($i == 0){
-										echo "<th scope='col'>#".$col."</th>";
-									}
-									else{
-										echo "<th scope='col'>".$col."</th>";
-									}
-									$i++;
-								}
-										
-								echo "</tr></thead>";
+								echo "<thead>
+										<tr class='table-danger'>
+											<th scope='col'>#empno</th><th scope='col'>ename</th><th scope='col'>job</th><th scope='col'>mgr</th><th scope='col'>hiredate</th><th scope='col'>sal</th><th scope='col'>comm</th><th scope='col'>deptno</th>
+										</tr>
+									</thead>";
 								echo "<tbody>";
 								while($row = $result->fetch(PDO::FETCH_ASSOC)){
-									echo "<tr>";
-									foreach($colNames as $col){
-										//IDK if it is better to write NULL or leave entry empty
-										if(!isset($row[$col])){
-											echo "<td class='fst-italic fw-lighter text-muted'>NULL</td>";
-										}
-										else{
-											echo "<td>".$row[$col]."</td>";
-										}
-									}
-									//"<td>".$row["empno"]."</td><td>".$row["ename"]."</td><td>".$row["job"]."</td><td>".$row["mgr"]."</td><td>".$row["hiredate"]."</td><td>".$row["sal"]."</td><td>".$row["comm"]."</td><td>".$row["deptno"]."</td>"
-									
-									echo "</tr>";
+									echo "<tr>
+											<td>".$row["empno"]."</td><td>".$row["ename"]."</td><td>".$row["job"]."</td><td>".$row["mgr"]."</td><td>".$row["hiredate"]."</td><td>".$row["sal"]."</td><td>".$row["comm"]."</td><td>".$row["deptno"]."</td>
+										</tr>";
 								}
 								echo "</tbody></table>";
 							}
-
-
-							//not refactored and hard coded solution
-							if($_GET['select'] == 'employee'){
-								echo "<h1 class='mb-4'>Employee Table</h1>";
-
-								$sql = "SELECT * FROM employee";
-								$result = $con->prepare($sql);
-								$result->execute();
-								if($result){
-									echo "<table class='table table-striped'>";
-									echo "<thead>
-											<tr class='table-danger'>
-												<th scope='col'>#empno</th><th scope='col'>ename</th><th scope='col'>job</th><th scope='col'>mgr</th><th scope='col'>hiredate</th><th scope='col'>sal</th><th scope='col'>comm</th><th scope='col'>deptno</th>
-											</tr>
-										</thead>";
-									echo "<tbody>";
-									while($row = $result->fetch(PDO::FETCH_ASSOC)){
-										echo "<tr>
-												<td>".$row["empno"]."</td><td>".$row["ename"]."</td><td>".$row["job"]."</td><td>".$row["mgr"]."</td><td>".$row["hiredate"]."</td><td>".$row["sal"]."</td><td>".$row["comm"]."</td><td>".$row["deptno"]."</td>
-											</tr>";
-									}
-									echo "</tbody></table>";
-								}
-								else{
-									echo "<p>Table employee does not exist or is empty.</p>";
-								}
-							}
-							// DEPARTMENT TABLE
-							else if($_GET['select'] == 'department'){
-								echo "<h1 class='mb-4'>Department Table</h1>";
-
-								$sql = "SELECT * FROM department";
-								$result = $con->prepare($sql);
-								$result->execute();
-								if($result){
-									echo "<table class='table table-striped'>";
-									echo "<thead>
-											<tr class='table-danger'>
-												<th scope='col'>#deptno</th><th scope='col'>dname</th><th scope='col'>loc</th>
-											</tr>
-										</thead>";
-									echo "<tbody>";
-									while($row = $result->fetch(PDO::FETCH_ASSOC)){
-										echo "<tr><td>".$row["deptno"]."</td><td>".$row["dname"]."</td><td>".$row["loc"]."</td></tr>";
-									}
-									echo "</tbody></table>";
-								}
-								else{
-									echo "<p>Table department does not exist or is empty.</p>";
-								}
+							else{
+								echo "<p>Table employee does not exist or is empty.</p>";
 							}
 						}
+						// DEPARTMENT TABLE
+						else if($_GET['select'] == 'department'){
+							echo "<h1 class='mb-4'>Department Table</h1>";
 
-						$con = null;
-					?>
+							$sql = "SELECT * FROM department";
+							$result = $con->prepare($sql);
+							$result->execute();
+							if($result){
+								echo "<table class='table table-striped'>";
+								echo "<thead>
+										<tr class='table-danger'>
+											<th scope='col'>#deptno</th><th scope='col'>dname</th><th scope='col'>loc</th>
+										</tr>
+									</thead>";
+								echo "<tbody>";
+								while($row = $result->fetch(PDO::FETCH_ASSOC)){
+									echo "<tr><td>".$row["deptno"]."</td><td>".$row["dname"]."</td><td>".$row["loc"]."</td></tr>";
+								}
+								echo "</tbody></table>";
+							}
+							else{
+								echo "<p>Table department does not exist or is empty.</p>";
+							}
+						}
+					}
 
-					<div class="mt-5">
-						<button class="btn btn-secondary mb-5">+ Add Row</button>
-					</div>
+					$con = null;
+				?>
+
+				<div class="mt-5">
+					<button class="btn btn-secondary mb-5">+ Add Row</button>
 				</div>
-			<div>
-			
-		</div>
+			</div>
+		<div>
 		
 
 			<!--
