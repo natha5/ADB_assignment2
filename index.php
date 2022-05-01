@@ -75,9 +75,11 @@
 				</div>
 				<div class="col-8 px-3">
 					<?php
-						$con = new PDO("mysql:host=localhost;dbname=assignment", 'root', '');
-
-						if(isset($_GET['select'])){
+						require 'connect.php';
+						if($con == null){
+							echo "<h4 class='alert alert-danger'>Could not connect to the database.</h4>";
+						}
+						else if(isset($_GET['select'])){
 							// refactored and dynamically created solution
 							// get column names for the selected table
 							$sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '".$_GET['select']."'";

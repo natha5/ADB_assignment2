@@ -1,9 +1,15 @@
 <?php
+
+require 'connect.php';
+
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST'); 
 
-$con = new PDO("mysql:host=localhost;dbname=assignment", 'root', '');
+if($con == null){
+    echo json_encode(["message"=>"Could not connect to the database."]);
+    return http_response_code(400);
+}
 
 $postdata = file_get_contents("php://input");
 if(isset($postdata) && !empty($postdata)){
