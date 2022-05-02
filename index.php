@@ -104,38 +104,7 @@
 						$result = $con->prepare($sql);
 						$result->execute();
 						if($result){
-							echo "<table class='table table-striped'>";
-							echo "<thead><tr class='table-danger'>";
-							$i = 0;
-							foreach($colNames as $col){
-								//write # with the name of the first column (primary key)
-								if($i == 0){
-									echo "<th scope='col'>#".$col."</th>";
-								}
-								else{
-									echo "<th scope='col'>".$col."</th>";
-								}
-								$i++;
-							}
-									
-							echo "</tr></thead>";
-							echo "<tbody>";
-							while($row = $result->fetch(PDO::FETCH_ASSOC)){
-								echo "<tr>";
-								foreach($colNames as $col){
-									//IDK if it is better to write NULL or leave entry empty
-									if(!isset($row[$col])){
-										echo "<td class='fst-italic fw-lighter text-muted'>NULL</td>";
-									}
-									else{
-										echo "<td>".$row[$col]."</td>";
-									}
-								}
-								//"<td>".$row["empno"]."</td><td>".$row["ename"]."</td><td>".$row["job"]."</td><td>".$row["mgr"]."</td><td>".$row["hiredate"]."</td><td>".$row["sal"]."</td><td>".$row["comm"]."</td><td>".$row["deptno"]."</td>"
-								
-								echo "</tr>";
-							}
-							echo "</tbody></table>";
+							drawTable($result, [0]);							
 						}
 
 
@@ -192,6 +161,48 @@
 					}
 
 					$con = null;
+
+					// FUNCTION that draws a table and is compatible with any SQL SELECT query
+					// $result = result object from an SQL SELECT query
+					// $primaryKeys = indexes of columns that should have # in their table header
+					function drawTable($result, $primaryKeys){
+						$table = $result->fetchAll();
+						$colNames = array_keys(array_filter($table[0], function($key){
+							return !is_numeric($key);
+						},ARRAY_FILTER_USE_KEY));
+
+						echo "<table class='table table-striped'>";
+						echo "<thead><tr class='table-danger'>";
+						$i = 0;
+						foreach($colNames as $col){
+							//write # with the name of the first column (primary key)
+							if(in_array($i,$primaryKeys)){
+								echo "<th scope='col'>#".$col."</th>";
+							}
+							else{
+								echo "<th scope='col'>".$col."</th>";
+							}
+							$i++;
+						}						
+								
+						echo "</tr></thead>";
+						echo "<tbody>";
+						foreach($table as $row){
+							echo "<tr>";
+							foreach($colNames as $col){
+								//IDK if it is better to write NULL or leave entry empty
+								if(!isset($row[$col])){
+									echo "<td class='fst-italic fw-lighter text-muted'>NULL</td>";
+								}
+								else{
+									echo "<td>".$row[$col]."</td>";
+								}
+							}
+							
+							echo "</tr>";
+						}
+						echo "</tbody></table>";
+					}
 				?>
 
 				<div class="mt-5">
