@@ -47,7 +47,7 @@ if(isset($postdata) && !empty($postdata)){
         INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7654,'Martin','Salesman',7698,'1981-09-28',1250,1400,30);
         INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7698,'Blake','Manager',7839,'1981-05-01',2850,null,30);
         INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7782,'Clark','Manager',7839,'1981-06-09',2450,null,10);
-        INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7839,'King','President',null,'981-11-17',5000,null,10);
+        INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7839,'King','President',null,'1981-11-17',5000,null,10);
         INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7844,'Turner','Salesman',7698,'1981-09-08',1500,0,30);
         INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7876,'Adams','Clerk',7788,'1987-09-23',1100,null,20);
         INSERT INTO Employee (empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (7900,'James','Clerk',7698,'1981-12-03',950,null,30);
