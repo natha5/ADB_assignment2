@@ -67,8 +67,8 @@
 				<p class="mb-0"><a href="?select=department">Department</a></p>
 				<hr class="mt-4">
 				<h3>Queries:</h3>
-				<p class="mb-0"><a href="?q=query_1">Query 1</a></p>
-				<p class="mb-0"><a href="?q=query_2">Query 2</a></p>
+				<p class="mb-0"><a href="?q=SELECT d.loc as 'Location', AVG(e.sal) as 'Average Salary' FROM department d LEFT JOIN employee e ON d.deptno = e.deptno GROUP BY d.loc ORDER BY AVG(e.sal) DESC">Query 1</a></p>
+				<p class="mb-0"><a href="?q=SELECT e.ename as 'Name', e.job 'Job', e.hiredate as 'Hire date', d.dname as 'Department', ee.ename as 'Manager' FROM employee e INNER JOIN employee ee ON e.mgr = ee.empno INNER JOIN department d ON d.deptno = e.deptno WHERE e.hiredate > '1981-04-30'">Query 2</a></p>
 				<p class="mb-0"><a href="?q=query_3">Query 3</a></p>
 
 			</div>
@@ -100,64 +100,35 @@
 						}
 
 						//draw respective table
-						$sql = "SELECT * FROM ".$_GET['select'];
-						$result = $con->prepare($sql);
-						$result->execute();
-						if($result){
-							drawTable($result, [0]);							
-						}
-
-
-						//not refactored and hard coded solution
-						if($_GET['select'] == 'employee'){
-							echo "<h1 class='mb-4'>Employee Table</h1>";
-
-							$sql = "SELECT * FROM employee";
+						try{
+							$sql = "SELECT * FROM ".$_GET['select'];
 							$result = $con->prepare($sql);
 							$result->execute();
 							if($result){
-								echo "<table class='table table-striped'>";
-								echo "<thead>
-										<tr class='table-danger'>
-											<th scope='col'>#empno</th><th scope='col'>ename</th><th scope='col'>job</th><th scope='col'>mgr</th><th scope='col'>hiredate</th><th scope='col'>sal</th><th scope='col'>comm</th><th scope='col'>deptno</th>
-										</tr>
-									</thead>";
-								echo "<tbody>";
-								while($row = $result->fetch(PDO::FETCH_ASSOC)){
-									echo "<tr>
-											<td>".$row["empno"]."</td><td>".$row["ename"]."</td><td>".$row["job"]."</td><td>".$row["mgr"]."</td><td>".$row["hiredate"]."</td><td>".$row["sal"]."</td><td>".$row["comm"]."</td><td>".$row["deptno"]."</td>
-										</tr>";
-								}
-								echo "</tbody></table>";
-							}
-							else{
-								echo "<p>Table employee does not exist or is empty.</p>";
+								drawTable($result, [0]);							
 							}
 						}
-						// DEPARTMENT TABLE
-						else if($_GET['select'] == 'department'){
-							echo "<h1 class='mb-4'>Department Table</h1>";
+						catch(PDOException $e){
+							echo "<h4 class='alert alert-danger'>".$e->getMessage()."</h4>";
+						}
+					}
+					else if (isset($_GET['q'])){
+						$sql = $_GET['q'];
+						
+						echo "<h4>Query:</h4>";
+						echo "<div class='border border-danger border-2 rounded px-2 py-4 mb-4'>".$sql."</div>";
 
-							$sql = "SELECT * FROM department";
+						try{
 							$result = $con->prepare($sql);
 							$result->execute();
 							if($result){
-								echo "<table class='table table-striped'>";
-								echo "<thead>
-										<tr class='table-danger'>
-											<th scope='col'>#deptno</th><th scope='col'>dname</th><th scope='col'>loc</th>
-										</tr>
-									</thead>";
-								echo "<tbody>";
-								while($row = $result->fetch(PDO::FETCH_ASSOC)){
-									echo "<tr><td>".$row["deptno"]."</td><td>".$row["dname"]."</td><td>".$row["loc"]."</td></tr>";
-								}
-								echo "</tbody></table>";
-							}
-							else{
-								echo "<p>Table department does not exist or is empty.</p>";
+								drawTable($result, []);
 							}
 						}
+						catch(PDOException $e){
+							echo "<h4 class='alert alert-danger'>".$e->getMessage()."</h4>";
+						}
+						
 					}
 
 					$con = null;
@@ -192,7 +163,7 @@
 							foreach($colNames as $col){
 								//IDK if it is better to write NULL or leave entry empty
 								if(!isset($row[$col])){
-									echo "<td class='fst-italic fw-lighter text-muted'>NULL</td>";
+									echo "<td class='fst-italic fw-lighter text-muted'>null</td>";
 								}
 								else{
 									echo "<td>".$row[$col]."</td>";
