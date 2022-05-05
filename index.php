@@ -69,7 +69,7 @@
 				<h3>Queries:</h3>
 				<p class="mb-0"><a href="?q=SELECT d.loc as 'Location', AVG(e.sal) as 'Average Salary' FROM department d LEFT JOIN employee e ON d.deptno = e.deptno GROUP BY d.loc ORDER BY AVG(e.sal) DESC">Query 1</a></p>
 				<p class="mb-0"><a href="?q=SELECT e.ename as 'Name', e.job 'Job', e.hiredate as 'Hire date', d.dname as 'Department', ee.ename as 'Manager' FROM employee e INNER JOIN employee ee ON e.mgr = ee.empno INNER JOIN department d ON d.deptno = e.deptno WHERE e.hiredate > '1981-04-30'">Query 2</a></p>
-				<p class="mb-0"><a href="?q=query_3">Query 3</a></p>
+				<p class="mb-0"><a href="?q=SELECT e.job as 'Job', COUNT(e.ename) as 'Number of Workers', MAX(e.comm) as 'Comm' FROM employee e GROUP BY e.job HAVING COUNT(e.ename) = COUNT(DISTINCT e.ename)">Query 3</a></p>
 
 			</div>
 			<div class="col-8 px-3 pt-4">
