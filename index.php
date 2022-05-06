@@ -40,6 +40,14 @@
 				return window.location.href.split('?')[0];
 			}
 
+			function runQuery(){
+				this.window.location.href = getBaseURL() + '?id=0&q=' + document.getElementById("query-input").value;
+			}
+
+			function editQuery(){
+				this.window.location.href = getBaseURL() + '?id=custom&q=' + document.getElementById("sql-text").innerHTML;
+			}
+
 			
 			//this uses jQuery
 			/*
@@ -67,9 +75,10 @@
 				<p class="mb-0"><a href="?select=department">Department</a></p>
 				<hr class="mt-4">
 				<h3>Queries:</h3>
-				<p class="mb-0"><a href="?q=SELECT d.loc as 'Location', AVG(e.sal) as 'Average Salary' FROM department d LEFT JOIN employee e ON d.deptno = e.deptno GROUP BY d.loc ORDER BY AVG(e.sal) DESC">Query 1</a></p>
-				<p class="mb-0"><a href="?q=SELECT e.ename as 'Name', e.job 'Job', e.hiredate as 'Hire date', d.dname as 'Department', ee.ename as 'Manager' FROM employee e INNER JOIN employee ee ON e.mgr = ee.empno INNER JOIN department d ON d.deptno = e.deptno WHERE e.hiredate > '1981-04-30'">Query 2</a></p>
-				<p class="mb-0"><a href="?q=SELECT e.job as 'Job', COUNT(e.ename) as 'Number of Workers', MAX(e.comm) as 'Comm' FROM employee e GROUP BY e.job HAVING COUNT(e.ename) = COUNT(DISTINCT e.ename)">Query 3</a></p>
+				<p class="mb-0"><a href="?id=1&q=SELECT d.loc as 'Location', AVG(e.sal) as 'Average Salary' FROM department d LEFT JOIN employee e ON d.deptno = e.deptno GROUP BY d.loc ORDER BY AVG(e.sal) DESC">Query 1</a></p>
+				<p class="mb-0"><a href="?id=2&q=SELECT e.ename as 'Name', e.job 'Job', e.hiredate as 'Hire date', d.dname as 'Department', ee.ename as 'Manager' FROM employee e INNER JOIN employee ee ON e.mgr = ee.empno INNER JOIN department d ON d.deptno = e.deptno WHERE e.hiredate > '1981-04-30'">Query 2</a></p>
+				<p class="mb-0"><a href="?id=3&q=SELECT e.job as 'Job', COUNT(e.ename) as 'Number of Workers', MAX(e.comm) as 'Comm' FROM employee e GROUP BY e.job HAVING COUNT(e.ename) = COUNT(DISTINCT e.ename)">Query 3</a></p>
+				<p class="mb-0"><a href="?id=custom">Custom</a></p>
 
 			</div>
 			<div class="col-8 px-3 pt-4">
@@ -107,28 +116,68 @@
 							if($result){
 								drawTable($result, [0]);							
 							}
+
+							echo "
+								<div class='mt-5'>
+									<button class='btn btn-secondary mb-5'>+ Add Row</button>
+								</div>
+							";
 						}
 						catch(PDOException $e){
 							echo "<h4 class='alert alert-danger'>".$e->getMessage()."</h4>";
 						}
 					}
 					else if (isset($_GET['q'])){
-						$sql = $_GET['q'];
-						
-						echo "<h4>Query:</h4>";
-						echo "<div class='border border-danger border-2 rounded px-2 py-4 mb-4'>".$sql."</div>";
-
-						try{
-							$result = $con->prepare($sql);
-							$result->execute();
-							if($result){
-								drawTable($result, []);
+						if ($_GET['id'] == 'custom'){
+							drawQueryInput($_GET['q']);
+						}
+						else{
+							if(isset($_GET['id']) && intval($_GET['id']) > 0){
+								echo "<h4>Query ".$_GET['id'].":</h4>";
 							}
-						}
-						catch(PDOException $e){
-							echo "<h4 class='alert alert-danger'>".$e->getMessage()."</h4>";
-						}
-						
+							else{
+								echo "<h4>Query:</h4>";
+							}
+							
+
+							$sql = $_GET['q'];
+							echo "<div class='border border-danger border-2 rounded pt-4 mb-4'>
+								<p class='px-2' id='sql-text'>".$sql."</p>
+								<button class='btn btn-outline-danger rounded ml-auto' onclick='editQuery()'>Edit query</button>
+								</div>";
+
+							try{
+								$statement = strtolower(explode(' ',$sql)[0]);
+								
+								if($statement == "select"){
+									$result = $con->prepare($sql);
+									$result->execute();
+									if($result){
+										drawTable($result, []);
+									}
+								}
+								else if($statement == "insert" || $statement == "update" || $statement == "delete"){
+									$result = $con->prepare($sql);
+									$result->execute();
+									if($result){
+										echo "<h4 class='alert alert-success'>".strtoupper($statement)." successful</h4>";
+									}
+								}
+								else{
+									echo "<h4 class='alert alert-danger'>Unsupported operation. Supported operations are SELECT, INSERT, UPDATE and DELETE</h4>";
+								}
+								
+							}
+							catch(Exception $e){
+								echo "<h4 class='alert alert-danger'>".$e->getMessage()."</h4>";
+							}
+							
+
+							
+						}						
+					}
+					else if(isset($_GET['id']) && $_GET['id']=="custom"){
+						drawQueryInput("");
 					}
 
 					$con = null;
@@ -174,11 +223,17 @@
 						}
 						echo "</tbody></table>";
 					}
+
+					function drawQueryInput($value){
+						echo "<h4>Enter query:</h4>";
+						echo "
+							<textarea id='query-input' class='form-control mt-3' placeholder='SELECT * FROM employee'>".$value."</textarea>
+							<button class='btn btn-secondary mt-4' onclick='runQuery()'>Run</button>
+						";
+					}
 				?>
 
-				<div class="mt-5">
-					<button class="btn btn-secondary mb-5">+ Add Row</button>
-				</div>
+				
 			</div>
 		<div>
 		
