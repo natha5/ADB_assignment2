@@ -20,7 +20,7 @@
 			const isReset = urlParams.get('reset');
 
 			function resetDB(){
-				fetch(getBaseURL()+"resetDB.php", {
+				fetch("http://localhost/ADB_assignment2/resetDB.php", {
 					method: 'POST',
 					headers: {'Content-Type': 'application/json'},
 					body: JSON.stringify({action:'resetDB'})
@@ -187,21 +187,13 @@
 									//if($_POST["enum"] != 
 							
 							
-									$sql = 'INSERT INTO employee (empno, ename, job, mgr, hiredate, sal, comm, deptno)
-									VALUES ('.$_POST["empno"].', '.$_POST["ename"].', '.$_POST["job"].', '.$_POST["mgr"].', '.$_POST["hiredate"].', '.$_POST["sal"].', '.$_POST["comm"].', '.$_POST["deptno"].')';
-									if ($con->query($sql) === TRUE) {
-										echo "
-											<div class='mt-5'>
-											<p>Inserted succesfully<p>
-										";
-									} else {
-										echo "
-											<div class='mt-5'>
-											<p>Insertion failed<p>
-											</div>
-											";
-									}
-								}
+									$sql = "
+									INSERT INTO Employee (empno, ename, job, mgr, hiredate, sal, comm, deptno)
+									VALUES ('".$_POST['empno']."', '".$_POST['ename']."', '".$_POST['job']."', '".$_POST['mgr']."', '".$_POST['hiredate']."', '".$_POST['sal']."', '".$_POST['comm']."', '".$_POST['deptno']."')
+									";
+									
+									$sentData = $con->prepare($sql);
+									$sentData->execute();
 								
 							}else if($_GET['select'] == 'department'){
 								
@@ -214,15 +206,15 @@
 										<input type='text' id='deptnoInput' name='deptnoInput'>
 										<span class='error'>* <?php echo $deptnoErr;?></span><br>
 			
-										<label for='dname'>Department name:</label><br>
+										<label for='dnameInput'>Department name:</label><br>
 										<input type='text' id='dnameInput' name='dnameInput'>
 										<span class='error'>* <?php echo $dnameErr;?></span><br>
 			
-										<label for='loc'>Location:</label><br>
+										<label for='locInput'>Location:</label><br>
 										<input type='text' id='locInput' name='locInput'>
 										<span class='error'>* <?php echo $locErr;?></span><br>
 			
-										<button class='btn btn-secondary mb-5' name='submit'>+ Add Row</button>
+										<button class='btn btn-secondary mb-5' name='submit' type='submit'>+ Add Row</button>
 										</form>
 									</div>
 								";
@@ -241,24 +233,22 @@
 										}
 
 									}
-									$sql = 'INSERT INTO department (deptno, dname, loc)
-									VALUES ('.$_POST["deptnoInput"].', '.$_POST["dnameInput"].', '.$_POST["locInput"].')';
-									if ($con->query($sql) === TRUE) {
-										echo "
-											<div class='mt-5'>
-											<p>Inserted succesfully<p>
-										";
-									} else {
-										echo "
-											<div class='mt-5'>
-											<p>Insertion failed<p>
-											</div>
-											";
-									}
+									
+									
+									
+									$sql = "
+									INSERT INTO Department (deptno,dname,loc) 
+									VALUES ('".$_POST['deptnoInput']."','".$_POST['dnameInput']."','".$_POST['locInput']."');
+									";
+									
+									
+									$sentData = $con->prepare($sql);
+									$sentData->execute();
+									
 								}
 							}
 						}
-								
+						}		
 						catch(PDOException $e){
 							echo "<h4 class='alert alert-danger'>".$e->getMessage()."</h4>";
 						}
