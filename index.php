@@ -119,9 +119,36 @@
 
 							echo "
 								<div class='mt-5'>
+								
+									<label for='ename'>Employee surname:</label><br>
+									<input type='text' id='ename' name='ename'><br>
+			
+									<label for='enum'>Employee number:</label><br>
+									<input type='text' id='enum' name='enum'><br>
+			
+									<label for='job'>Job:</label><br>
+									<input type='text' id='job' name='job'><br>
+			
+									<label for='mgr'>Manager:</label><br>
+									<input type='text' id='mgr' name='mgr'><br>
+			
+									<label for='hiredate'>Hiredate:</label><br>
+									<input type='text' id='hiredate' name='hiredate'><br>
+			
+									<label for='sal'>Salary:</label><br>
+									<input type='text' id='sal' name='sal'><br>
+			
+									<label for='comm'>Comm:</label><br>
+									<input type='text' id='comm' name='comm'><br>
+			
+									<label for='deptno'>Department Number:</label><br>
+									<input type='text' id='deptno' name='deptno'><br>
+									
 									<button class='btn btn-secondary mb-5'>+ Add Row</button>
 								</div>
 							";
+							$sql = 'INSERT INTO employee (empno, ename, job, mgr, hiredate, sal, comm, deptno)
+							VALUES ($_GET["enum"], $_GET["ename"], $_GET["job"], $_GET["mgr"], $_GET["hiredate"], $_GET["sal"], $_GET["comm"], $_GET["deptno"])';
 						}
 						catch(PDOException $e){
 							echo "<h4 class='alert alert-danger'>".$e->getMessage()."</h4>";
