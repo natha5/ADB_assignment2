@@ -127,33 +127,33 @@
 									<div class='mt-5'>
 									<form method ='post'>
 										<label for='ename'>Employee surname:</label><br>
-										<input type='text' id='ename' name='ename'><br>
-										<span class='error'>* <?php echo $enameErr;?></span>
+										<input type='text' id='ename' name='ename'>
+										<span class='error'>* <?php echo $enameErr;?></span><br>
 			
 										<label for='empno'>Employee number:</label><br>
-										<input type='text' id='empno' name='empno'><br>
-										<span class='error'>* <?php echo $empnoErr;?></span>
+										<input type='text' id='empno' name='empno'>
+										<span class='error'>* <?php echo $empnoErr;?></span><br>
 			
 										<label for='job'>Job:</label><br>
-										<input type='text' id='job' name='job'><br>
-										<span class='error'>* <?php echo $jobErr;?></span>
+										<input type='text' id='job' name='job'>
+										<span class='error'>* <?php echo $jobErr;?></span><br>
 			
 										<label for='mgr'>Manager:</label><br>
 										<input type='text' id='mgr' name='mgr'><br>
 			
 										<label for='hiredate'>Hiredate:</label><br>
-										<input type='text' id='hiredate' name='hiredate'><br>
-										<span class='error'>* <?php echo $hiredateErr;?></span>
+										<input type='text' id='hiredate' name='hiredate'>
+										<span class='error'>* <?php echo $hiredateErr;?></span><br>
 			
 										<label for='sal'>Salary:</label><br>
-										<input type='text' id='sal' name='sal'><br>
-										<span class='error'>* <?php echo $salErr;?></span>
+										<input type='text' id='sal' name='sal'>
+										<span class='error'>* <?php echo $salErr;?></span><br>
 			
 										<label for='comm'>Comm:</label><br>
 										<input type='text' id='comm' name='comm'><br>
 			
 										<label for='deptno'>Department Number:</label><br>
-										<input type='text' id='deptno' name='deptno'><br>
+										<input type='text' id='deptno' name='deptno'>
 										<span class='error'>* <?php echo $deptnoErr;?></span><br>
 									
 										<button class='btn btn-secondary mb-5' name='submit'>+ Add Row</button>
@@ -205,22 +205,22 @@
 								
 							}else if($_GET['select'] == 'department'){
 								
-								$deptnoErr = $dnameErr = $locErr = ""
+								$deptnoErr = $dnameErr = $locErr = "";
 								
 								echo "
 									<div class='mt-5'>
 									<form method ='post'>
 										<label for='deptno'>Department number:</label><br>
-										<input type='text' id='deptno' name='deptno'><br>
-										<span class='error'>* <?php echo $deptnoErr;?></span>
+										<input type='text' id='deptno' name='deptno'>
+										<span class='error'>* <?php echo $deptnoErr;?></span><br>
 			
 										<label for='dname'>Department name:</label><br>
-										<input type='text' id='dname' name='dname'><br>
-										<span class='error'>* <?php echo $dnameErr;?></span>
+										<input type='text' id='dname' name='dname'>
+										<span class='error'>* <?php echo $dnameErr;?></span><br>
 			
 										<label for='loc'>Location:</label><br>
-										<input type='text' id='loc' name='loc'><br>
-										<span class='error'>* <?php echo $locErr;?></span>
+										<input type='text' id='loc' name='loc'>
+										<span class='error'>* <?php echo $locErr;?></span><br>
 			
 										<button class='btn btn-secondary mb-5' name='submit'>+ Add Row</button>
 										</form>
@@ -255,6 +255,7 @@
 											</div>
 											";
 									}
+								}
 							}
 						}
 								
