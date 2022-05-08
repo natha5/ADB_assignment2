@@ -116,40 +116,148 @@
 							if($result){
 								drawTable($result, [0]);							
 							}
-
-							echo "
-								<div class='mt-5'>
+							
+							
+							if($_GET['select'] == 'employee'){
 								
-									<label for='ename'>Employee surname:</label><br>
-									<input type='text' id='ename' name='ename'><br>
+							
+								$empnoErr = $enameErr = $jobErr = $hiredateErr = $salErr = $deptnoErr = "";
+							
+								echo "
+									<div class='mt-5'>
+									<form method ='post'>
+										<label for='ename'>Employee surname:</label><br>
+										<input type='text' id='ename' name='ename'><br>
+										<span class='error'>* <?php echo $enameErr;?></span>
 			
-									<label for='enum'>Employee number:</label><br>
-									<input type='text' id='enum' name='enum'><br>
+										<label for='empno'>Employee number:</label><br>
+										<input type='text' id='empno' name='empno'><br>
+										<span class='error'>* <?php echo $empnoErr;?></span>
 			
-									<label for='job'>Job:</label><br>
-									<input type='text' id='job' name='job'><br>
+										<label for='job'>Job:</label><br>
+										<input type='text' id='job' name='job'><br>
+										<span class='error'>* <?php echo $jobErr;?></span>
 			
-									<label for='mgr'>Manager:</label><br>
-									<input type='text' id='mgr' name='mgr'><br>
+										<label for='mgr'>Manager:</label><br>
+										<input type='text' id='mgr' name='mgr'><br>
 			
-									<label for='hiredate'>Hiredate:</label><br>
-									<input type='text' id='hiredate' name='hiredate'><br>
+										<label for='hiredate'>Hiredate:</label><br>
+										<input type='text' id='hiredate' name='hiredate'><br>
+										<span class='error'>* <?php echo $hiredateErr;?></span>
 			
-									<label for='sal'>Salary:</label><br>
-									<input type='text' id='sal' name='sal'><br>
+										<label for='sal'>Salary:</label><br>
+										<input type='text' id='sal' name='sal'><br>
+										<span class='error'>* <?php echo $salErr;?></span>
 			
-									<label for='comm'>Comm:</label><br>
-									<input type='text' id='comm' name='comm'><br>
+										<label for='comm'>Comm:</label><br>
+										<input type='text' id='comm' name='comm'><br>
 			
-									<label for='deptno'>Department Number:</label><br>
-									<input type='text' id='deptno' name='deptno'><br>
+										<label for='deptno'>Department Number:</label><br>
+										<input type='text' id='deptno' name='deptno'><br>
+										<span class='error'>* <?php echo $deptnoErr;?></span><br>
 									
-									<button class='btn btn-secondary mb-5'>+ Add Row</button>
-								</div>
-							";
-							$sql = 'INSERT INTO employee (empno, ename, job, mgr, hiredate, sal, comm, deptno)
-							VALUES ($_GET["enum"], $_GET["ename"], $_GET["job"], $_GET["mgr"], $_GET["hiredate"], $_GET["sal"], $_GET["comm"], $_GET["deptno"])';
+										<button class='btn btn-secondary mb-5' name='submit'>+ Add Row</button>
+										</form>
+									</div>
+								";
+								if(isset($_POST['submit']))
+								{
+								
+									if ($_SERVER["REQUEST_METHOD"] == "POST") {
+										if (empty($_POST["empno"])) {
+											$empnoErr = "Employee number is required";
+										}
+										if (empty($_POST["ename"])) {
+											$enameErr = "Name is required";
+										}
+										if (empty($_POST["job"])) {
+											$jobErr = "Job is required";
+										}
+										if (empty($_POST["hiredate"])) {
+											$hiredateErr = "hiredate is required";
+										}
+										if (empty($_POST["sal"])) {
+											$salErr = "Salary is required";
+										}
+										if (empty($_POST["deptno"])) {
+											$deptnoErr = "Department number is required";
+										}
+
+									}
+									//if($_POST["enum"] != 
+							
+							
+									$sql = 'INSERT INTO employee (empno, ename, job, mgr, hiredate, sal, comm, deptno)
+									VALUES ($_POST["empno"], $_POST["ename"], $_POST["job"], $_POST["mgr"], $_POST["hiredate"], $_POST["sal"], $_POST["comm"], $_POST["deptno"])';
+									if ($con->query($sql) === TRUE) {
+										echo "
+											<div class='mt-5'>
+											<p>Inserted succesfully<p>
+										";
+									} else {
+										echo "
+											<div class='mt-5'>
+											<p>Insertion failed<p>
+											</div>
+											";
+									}
+								}
+								
+							}else if($_GET['select'] == 'department'){
+								
+								$deptnoErr = $dnameErr = $locErr = ""
+								
+								echo "
+									<div class='mt-5'>
+									<form method ='post'>
+										<label for='deptno'>Department number:</label><br>
+										<input type='text' id='deptno' name='deptno'><br>
+										<span class='error'>* <?php echo $deptnoErr;?></span>
+			
+										<label for='dname'>Department name:</label><br>
+										<input type='text' id='dname' name='dname'><br>
+										<span class='error'>* <?php echo $dnameErr;?></span>
+			
+										<label for='loc'>Location:</label><br>
+										<input type='text' id='loc' name='loc'><br>
+										<span class='error'>* <?php echo $locErr;?></span>
+			
+										<button class='btn btn-secondary mb-5' name='submit'>+ Add Row</button>
+										</form>
+									</div>
+								";
+								if(isset($_POST['submit']))
+								{
+								
+									if ($_SERVER["REQUEST_METHOD"] == "POST") {
+										if (empty($_POST["empno"])) {
+											$deptnoErr = "Department is required";
+										}
+										if (empty($_POST["dname"])) {
+											$dnameErr = "Department name is required";
+										}
+										if (empty($_POST["loc"])) {
+											$locErr = "Location is required";
+										}
+
+									}
+									$sql = 'INSERT INTO department (deptno, dname, loc)
+									VALUES ($_POST["deptno"], $_POST["dname"], $_POST["loc"])';
+									if ($con->query($sql) === TRUE) {
+										echo "
+											<div class='mt-5'>
+											<p>Inserted succesfully<p>
+										";
+									} else {
+										echo "
+											<div class='mt-5'>
+											<p>Insertion failed<p>
+											</div>
+											";
+									}
+							}
 						}
+								
 						catch(PDOException $e){
 							echo "<h4 class='alert alert-danger'>".$e->getMessage()."</h4>";
 						}
