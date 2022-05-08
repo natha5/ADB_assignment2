@@ -188,7 +188,7 @@
 							
 							
 									$sql = 'INSERT INTO employee (empno, ename, job, mgr, hiredate, sal, comm, deptno)
-									VALUES ($_POST["empno"], $_POST["ename"], $_POST["job"], $_POST["mgr"], $_POST["hiredate"], $_POST["sal"], $_POST["comm"], $_POST["deptno"])';
+									VALUES ('.$_POST["empno"].', '.$_POST["ename"].', '.$_POST["job"].', '.$_POST["mgr"].', '.$_POST["hiredate"].', '.$_POST["sal"].', '.$_POST["comm"].', '.$_POST["deptno"].')';
 									if ($con->query($sql) === TRUE) {
 										echo "
 											<div class='mt-5'>
@@ -210,16 +210,16 @@
 								echo "
 									<div class='mt-5'>
 									<form method ='post'>
-										<label for='deptno'>Department number:</label><br>
-										<input type='text' id='deptno' name='deptno'>
+										<label for='deptnoInput'>Department number:</label><br>
+										<input type='text' id='deptnoInput' name='deptnoInput'>
 										<span class='error'>* <?php echo $deptnoErr;?></span><br>
 			
 										<label for='dname'>Department name:</label><br>
-										<input type='text' id='dname' name='dname'>
+										<input type='text' id='dnameInput' name='dnameInput'>
 										<span class='error'>* <?php echo $dnameErr;?></span><br>
 			
 										<label for='loc'>Location:</label><br>
-										<input type='text' id='loc' name='loc'>
+										<input type='text' id='locInput' name='locInput'>
 										<span class='error'>* <?php echo $locErr;?></span><br>
 			
 										<button class='btn btn-secondary mb-5' name='submit'>+ Add Row</button>
@@ -230,19 +230,19 @@
 								{
 								
 									if ($_SERVER["REQUEST_METHOD"] == "POST") {
-										if (empty($_POST["empno"])) {
+										if (empty($_POST["deptnoInput"])) {
 											$deptnoErr = "Department is required";
 										}
-										if (empty($_POST["dname"])) {
+										if (empty($_POST["dnameInput"])) {
 											$dnameErr = "Department name is required";
 										}
-										if (empty($_POST["loc"])) {
+										if (empty($_POST["locInput"])) {
 											$locErr = "Location is required";
 										}
 
 									}
 									$sql = 'INSERT INTO department (deptno, dname, loc)
-									VALUES ($_POST["deptno"], $_POST["dname"], $_POST["loc"])';
+									VALUES ('.$_POST["deptnoInput"].', '.$_POST["dnameInput"].', '.$_POST["locInput"].')';
 									if ($con->query($sql) === TRUE) {
 										echo "
 											<div class='mt-5'>
