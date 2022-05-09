@@ -252,7 +252,7 @@
 
 
 
-					if($_GET['select'] == 'employee'){							
+					if($_GET['select'] == 'employee'){
 						$empnoErr = $enameErr = $jobErr = $hiredateErr = $salErr = $deptnoErr = "";
 					
 						echo "
@@ -328,6 +328,7 @@
 							
 							$sentData = $con->prepare($sql);
 							$sentData->execute();
+						}
 						
 					}else if($_GET['select'] == 'department'){
 						
