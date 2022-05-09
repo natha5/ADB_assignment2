@@ -231,21 +231,6 @@
 								array_push($colNames, $row['COLUMN_NAME']);
 							}
 						}
-
-						echo "<form method = 'post' class='container mt-4'>";
-						foreach($colNames as $col){
-							echo "
-								<div class='row'><div class='col'>
-								<label for='".$col."'>".$col."</label><br>
-								<div class='d-inline-flex justify-content-left mb-2'>
-									<input class='form-control' type='text' id='".$col."' name='".$col."' required>
-									<span class='error'>*</span><br>
-								</div>
-								</div></div>
-							";
-						}
-						echo "<button class='btn btn-secondary mb-5' name='submit'>+ Add Row</button>";
-						echo "</form>";
 					}
 					
 
@@ -288,7 +273,7 @@
 	
 								<label for='deptno'>Department Number:</label><br>
 								<input type='text' id='deptno' name='deptno' required>
-								<span class='error'>* <?php echo $deptnoErr;?></span><br>
+								<span class='error'>* <?php echo $deptnoErr;?></span><br><br>
 							
 								<button class='btn btn-secondary mb-5' name='submit'>+ Add Row</button>
 								</form>
