@@ -219,24 +219,8 @@
 			</div>
 			<div class="full-height col-3 bg-grey">
 				<?php
-					if (isset($_GET['select'])){
-						require "connect.php";
-						// get column names for the selected table
-						$sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '".$_GET['select']."'";
-						$colsResult = $con->prepare($sql);
-						$colsResult->execute();
-						$colNames = [];
-						if($colsResult){
-							while($row = $colsResult->fetch(PDO::FETCH_ASSOC)){
-								array_push($colNames, $row['COLUMN_NAME']);
-							}
-						}
-					}
-					
-
-
-
-
+				if(isset($_GET['select'])){
+					require 'connect.php';
 					if($_GET['select'] == 'employee'){
 						$empnoErr = $enameErr = $jobErr = $hiredateErr = $salErr = $deptnoErr = "";
 					
@@ -244,36 +228,52 @@
 							<div class='mt-5'>
 							<form method ='post' class='container'>
 								<label for='ename'>Employee surname:</label><br>
-								<div class='d-inline-flex justify-content-left mb-3'>
+								<div class='d-flex justify-content-left mb-3'>
 									<input class='form-control' type='text' id='ename' name='ename' required>
 									<span class='error'>* <?php echo $enameErr;?></span><br>
 								</div>
 	
 								<label for='empno'>Employee number:</label><br>
-								<input type='text' id='empno' name='empno' required>
-								<span class='error'>* <?php echo $empnoErr;?></span><br>
+								<div class='d-flex justify-content-left mb-3'>
+									<input class='form-control' type='text' id='empno' name='empno' required>
+									<span class='error'>* <?php echo $empnoErr;?></span><br>
+								</div>
 	
 								<label for='job'>Job:</label><br>
-								<input type='text' id='job' name='job' required>
-								<span class='error'>* <?php echo $jobErr;?></span><br>
+								<div class='d-flex justify-content-left mb-3'>
+									<input class='form-control' type='text' id='job' name='job' required>
+									<span class='error'>* <?php echo $jobErr;?></span><br>
+								</div>
 	
 								<label for='mgr'>Manager:</label><br>
-								<input type='text' id='mgr' name='mgr'><br>
+								<div class='d-flex justify-content-left mb-3'>
+									<input class='form-control' type='text' id='mgr' name='mgr'>
+									<span class='error' style='color:transparent'>*</span>
+								</div>
 	
 								<label for='hiredate'>Hiredate:</label><br>
-								<input type='text' id='hiredate' name='hiredate' required>
-								<span class='error'>* <?php echo $hiredateErr;?></span><br>
+								<div class='d-flex justify-content-left mb-3'>
+									<input class='form-control' type='text' id='hiredate' name='hiredate' required>
+									<span class='error'>* <?php echo $hiredateErr;?></span><br>
+								</div>
 	
 								<label for='sal'>Salary:</label><br>
-								<input type='text' id='sal' name='sal' required>
-								<span class='error'>* <?php echo $salErr;?></span><br>
+								<div class='d-flex justify-content-left mb-3'>
+									<input class='form-control' type='text' id='sal' name='sal' required>
+									<span class='error'>* <?php echo $salErr;?></span><br>
+								</div>
 	
 								<label for='comm'>Comm:</label><br>
-								<input type='text' id='comm' name='comm'><br>
+								<div class='d-flex justify-content-left mb-3'>
+									<input class='form-control' type='text' id='comm' name='comm'>
+									<span class='error' style='color:transparent'>*</span>
+								</div>
 	
 								<label for='deptno'>Department Number:</label><br>
-								<input type='text' id='deptno' name='deptno' required>
-								<span class='error'>* <?php echo $deptnoErr;?></span><br><br>
+								<div class='d-flex justify-content-left mb-3'>
+									<input class='form-control' type='text' id='deptno' name='deptno' required>
+									<span class='error'>* <?php echo $deptnoErr;?></span><br><br>
+								</div>
 							
 								<button class='btn btn-secondary mb-5' name='submit'>+ Add Row</button>
 								</form>
@@ -321,18 +321,24 @@
 						
 						echo "
 							<div class='mt-5'>
-							<form method ='post'>
+							<form method ='post' class='container'>
 								<label for='deptnoInput'>Department number:</label><br>
-								<input type='text' id='deptnoInput' name='deptnoInput'>
-								<span class='error'>* <?php echo $deptnoErr;?></span><br>
+								<div class='d-flex justify-content-left mb-3'>
+									<input class='form-control' type='text' id='deptnoInput' name='deptnoInput' required>
+									<span class='error'>* <?php echo $deptnoErr;?></span><br>
+								</div>
 	
 								<label for='dnameInput'>Department name:</label><br>
-								<input type='text' id='dnameInput' name='dnameInput'>
-								<span class='error'>* <?php echo $dnameErr;?></span><br>
+								<div class='d-flex justify-content-left mb-3'>
+									<input class='form-control' type='text' id='dnameInput' name='dnameInput' required>
+									<span class='error'>* <?php echo $dnameErr;?></span><br>
+								</div>
 	
 								<label for='locInput'>Location:</label><br>
-								<input type='text' id='locInput' name='locInput'>
-								<span class='error'>* <?php echo $locErr;?></span><br>
+								<div class='d-flex justify-content-left mb-3'>
+									<input class='form-control' type='text' id='locInput' name='locInput' required>
+									<span class='error'>* <?php echo $locErr;?></span><br>
+								</div>
 	
 								<button class='btn btn-secondary mb-5' name='submit' type='submit'>+ Add Row</button>
 								</form>
@@ -364,12 +370,9 @@
 							
 							$sentData = $con->prepare($sql);
 							$sentData->execute();
-							
 						}
 					}
-				
-
-
+				}
 				?>
 			</div>
 		<div>
