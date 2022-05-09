@@ -77,7 +77,7 @@
 				<h3>Queries:</h3>
 				<p class="mb-0"><a href="?id=1&q=SELECT d.loc as 'Location', AVG(e.sal) as 'Average Salary' FROM department d LEFT JOIN employee e ON d.deptno = e.deptno GROUP BY d.loc ORDER BY AVG(e.sal) DESC">Query 1</a></p>
 				<p class="mb-0"><a href="?id=2&q=SELECT e.ename as 'Name', e.job 'Job', e.hiredate as 'Hire date', d.dname as 'Department', ee.ename as 'Manager' FROM employee e INNER JOIN employee ee ON e.mgr = ee.empno INNER JOIN department d ON d.deptno = e.deptno WHERE e.hiredate > '1981-04-30'">Query 2</a></p>
-				<p class="mb-0"><a href="?id=3&q=SELECT e.job as 'Job', COUNT(e.ename) as 'Number of Workers', MAX(e.comm) as 'Comm' FROM employee e GROUP BY e.job HAVING COUNT(e.ename) = COUNT(DISTINCT e.ename)">Query 3</a></p>
+				<p class="mb-0"><a href="?id=3&q=SELECT e.job as 'Job', COUNT(e.ename) as 'Number of Workers', MAX(e.sal) as 'Max Salary' FROM employee e GROUP BY e.job HAVING COUNT(e.ename) = COUNT(DISTINCT e.ename)">Query 3</a></p>
 				<p class="mb-0"><a href="?id=custom">Custom</a></p>
 
 			</div>
@@ -116,6 +116,15 @@
 						else{
 							if(isset($_GET['id']) && intval($_GET['id']) > 0){
 								echo "<h4>Query ".$_GET['id'].":</h4>";
+								if($_GET['id'] == '1'){
+									echo "<p>List ALL locations and average salary for each location sorted from largest salary to smallest.</p>";
+								}
+								else if($_GET['id'] == '2'){
+									echo "<p>Employees that have been hired later than 30/04/1981. Also display the hire date, their department name and who is their manager. </p>";
+								}
+								else if($_GET['id'] == '3'){
+									echo "<p>List all jobs, how many people work that job, maximum salary and only display those jobs whose employees have all different names. </p>";
+								}
 							}
 							else{
 								echo "<h4>Query:</h4>";
