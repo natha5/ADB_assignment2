@@ -81,25 +81,13 @@
 				<p class="mb-0"><a href="?id=custom">Custom</a></p>
 
 			</div>
-			<div class="col-8 px-3 pt-4">
+			<div class="col-7 px-3 pt-4">
 				<?php
 					require 'connect.php';
 					if($con == null){
 						echo "<h4 class='alert alert-danger'>Could not connect to the database.</h4>";
 					}
 					else if(isset($_GET['select'])){
-						// refactored and dynamically created solution
-						// get column names for the selected table
-						$sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '".$_GET['select']."'";
-						$colsResult = $con->prepare($sql);
-						$colsResult->execute();
-						$colNames = [];
-						if($colsResult){
-							while($row = $colsResult->fetch(PDO::FETCH_ASSOC)){
-								array_push($colNames, $row['COLUMN_NAME']);
-							}
-						}
-
 						// set page title
 						if($_GET['select'] == 'employee'){
 							echo "<h1 class='mb-4'>Employee Table</h1>";
@@ -116,138 +104,6 @@
 							if($result){
 								drawTable($result, [0]);							
 							}
-							
-							
-							if($_GET['select'] == 'employee'){
-								
-							
-								$empnoErr = $enameErr = $jobErr = $hiredateErr = $salErr = $deptnoErr = "";
-							
-								echo "
-									<div class='mt-5'>
-									<form method ='post'>
-										<label for='ename'>Employee surname:</label><br>
-										<input type='text' id='ename' name='ename'>
-										<span class='error'>* <?php echo $enameErr;?></span><br>
-			
-										<label for='empno'>Employee number:</label><br>
-										<input type='text' id='empno' name='empno'>
-										<span class='error'>* <?php echo $empnoErr;?></span><br>
-			
-										<label for='job'>Job:</label><br>
-										<input type='text' id='job' name='job'>
-										<span class='error'>* <?php echo $jobErr;?></span><br>
-			
-										<label for='mgr'>Manager:</label><br>
-										<input type='text' id='mgr' name='mgr'><br>
-			
-										<label for='hiredate'>Hiredate:</label><br>
-										<input type='text' id='hiredate' name='hiredate'>
-										<span class='error'>* <?php echo $hiredateErr;?></span><br>
-			
-										<label for='sal'>Salary:</label><br>
-										<input type='text' id='sal' name='sal'>
-										<span class='error'>* <?php echo $salErr;?></span><br>
-			
-										<label for='comm'>Comm:</label><br>
-										<input type='text' id='comm' name='comm'><br>
-			
-										<label for='deptno'>Department Number:</label><br>
-										<input type='text' id='deptno' name='deptno'>
-										<span class='error'>* <?php echo $deptnoErr;?></span><br>
-									
-										<button class='btn btn-secondary mb-5' name='submit'>+ Add Row</button>
-										</form>
-									</div>
-								";
-								if(isset($_POST['submit']))
-								{
-								
-									if ($_SERVER["REQUEST_METHOD"] == "POST") {
-										if (empty($_POST["empno"])) {
-											$empnoErr = "Employee number is required";
-										}
-										if (empty($_POST["ename"])) {
-											$enameErr = "Name is required";
-										}
-										if (empty($_POST["job"])) {
-											$jobErr = "Job is required";
-										}
-										if (empty($_POST["hiredate"])) {
-											$hiredateErr = "hiredate is required";
-										}
-										if (empty($_POST["sal"])) {
-											$salErr = "Salary is required";
-										}
-										if (empty($_POST["deptno"])) {
-											$deptnoErr = "Department number is required";
-										}
-
-									}
-									//if($_POST["enum"] != 
-							
-							
-									$sql = "
-									INSERT INTO Employee (empno, ename, job, mgr, hiredate, sal, comm, deptno)
-									VALUES ('".$_POST['empno']."', '".$_POST['ename']."', '".$_POST['job']."', '".$_POST['mgr']."', '".$_POST['hiredate']."', '".$_POST['sal']."', '".$_POST['comm']."', '".$_POST['deptno']."')
-									";
-									
-									$sentData = $con->prepare($sql);
-									$sentData->execute();
-								
-							}else if($_GET['select'] == 'department'){
-								
-								$deptnoErr = $dnameErr = $locErr = "";
-								
-								echo "
-									<div class='mt-5'>
-									<form method ='post'>
-										<label for='deptnoInput'>Department number:</label><br>
-										<input type='text' id='deptnoInput' name='deptnoInput'>
-										<span class='error'>* <?php echo $deptnoErr;?></span><br>
-			
-										<label for='dnameInput'>Department name:</label><br>
-										<input type='text' id='dnameInput' name='dnameInput'>
-										<span class='error'>* <?php echo $dnameErr;?></span><br>
-			
-										<label for='locInput'>Location:</label><br>
-										<input type='text' id='locInput' name='locInput'>
-										<span class='error'>* <?php echo $locErr;?></span><br>
-			
-										<button class='btn btn-secondary mb-5' name='submit' type='submit'>+ Add Row</button>
-										</form>
-									</div>
-								";
-								if(isset($_POST['submit']))
-								{
-								
-									if ($_SERVER["REQUEST_METHOD"] == "POST") {
-										if (empty($_POST["deptnoInput"])) {
-											$deptnoErr = "Department is required";
-										}
-										if (empty($_POST["dnameInput"])) {
-											$dnameErr = "Department name is required";
-										}
-										if (empty($_POST["locInput"])) {
-											$locErr = "Location is required";
-										}
-
-									}
-									
-									
-									
-									$sql = "
-									INSERT INTO Department (deptno,dname,loc) 
-									VALUES ('".$_POST['deptnoInput']."','".$_POST['dnameInput']."','".$_POST['locInput']."');
-									";
-									
-									
-									$sentData = $con->prepare($sql);
-									$sentData->execute();
-									
-								}
-							}
-						}
 						}		
 						catch(PDOException $e){
 							echo "<h4 class='alert alert-danger'>".$e->getMessage()."</h4>";
@@ -360,6 +216,175 @@
 				?>
 
 				
+			</div>
+			<div class="full-height col-3 bg-grey">
+				<?php
+					if (isset($_GET['select'])){
+						require "connect.php";
+						// get column names for the selected table
+						$sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '".$_GET['select']."'";
+						$colsResult = $con->prepare($sql);
+						$colsResult->execute();
+						$colNames = [];
+						if($colsResult){
+							while($row = $colsResult->fetch(PDO::FETCH_ASSOC)){
+								array_push($colNames, $row['COLUMN_NAME']);
+							}
+						}
+
+						echo "<form method = 'post' class='container mt-4'>";
+						foreach($colNames as $col){
+							echo "
+								<div class='row'><div class='col'>
+								<label for='".$col."'>".$col."</label><br>
+								<div class='d-inline-flex justify-content-left mb-2'>
+									<input class='form-control' type='text' id='".$col."' name='".$col."' required>
+									<span class='error'>*</span><br>
+								</div>
+								</div></div>
+							";
+						}
+						echo "<button class='btn btn-secondary mb-5' name='submit'>+ Add Row</button>";
+						echo "</form>";
+					}
+					
+
+
+
+
+					if($_GET['select'] == 'employee'){							
+						$empnoErr = $enameErr = $jobErr = $hiredateErr = $salErr = $deptnoErr = "";
+					
+						echo "
+							<div class='mt-5'>
+							<form method ='post' class='container'>
+								<label for='ename'>Employee surname:</label><br>
+								<div class='d-inline-flex justify-content-left mb-3'>
+									<input class='form-control' type='text' id='ename' name='ename' required>
+									<span class='error'>* <?php echo $enameErr;?></span><br>
+								</div>
+	
+								<label for='empno'>Employee number:</label><br>
+								<input type='text' id='empno' name='empno' required>
+								<span class='error'>* <?php echo $empnoErr;?></span><br>
+	
+								<label for='job'>Job:</label><br>
+								<input type='text' id='job' name='job' required>
+								<span class='error'>* <?php echo $jobErr;?></span><br>
+	
+								<label for='mgr'>Manager:</label><br>
+								<input type='text' id='mgr' name='mgr'><br>
+	
+								<label for='hiredate'>Hiredate:</label><br>
+								<input type='text' id='hiredate' name='hiredate' required>
+								<span class='error'>* <?php echo $hiredateErr;?></span><br>
+	
+								<label for='sal'>Salary:</label><br>
+								<input type='text' id='sal' name='sal' required>
+								<span class='error'>* <?php echo $salErr;?></span><br>
+	
+								<label for='comm'>Comm:</label><br>
+								<input type='text' id='comm' name='comm'><br>
+	
+								<label for='deptno'>Department Number:</label><br>
+								<input type='text' id='deptno' name='deptno' required>
+								<span class='error'>* <?php echo $deptnoErr;?></span><br>
+							
+								<button class='btn btn-secondary mb-5' name='submit'>+ Add Row</button>
+								</form>
+							</div>
+						";
+						if(isset($_POST['submit']))
+						{
+						
+							if ($_SERVER["REQUEST_METHOD"] == "POST") {
+								if (empty($_POST["empno"])) {
+									$empnoErr = "Employee number is required";
+								}
+								if (empty($_POST["ename"])) {
+									$enameErr = "Name is required";
+								}
+								if (empty($_POST["job"])) {
+									$jobErr = "Job is required";
+								}
+								if (empty($_POST["hiredate"])) {
+									$hiredateErr = "hiredate is required";
+								}
+								if (empty($_POST["sal"])) {
+									$salErr = "Salary is required";
+								}
+								if (empty($_POST["deptno"])) {
+									$deptnoErr = "Department number is required";
+								}
+
+							}
+							//if($_POST["enum"] != 
+					
+					
+							$sql = "
+							INSERT INTO Employee (empno, ename, job, mgr, hiredate, sal, comm, deptno)
+							VALUES ('".$_POST['empno']."', '".$_POST['ename']."', '".$_POST['job']."', '".$_POST['mgr']."', '".$_POST['hiredate']."', '".$_POST['sal']."', '".$_POST['comm']."', '".$_POST['deptno']."')
+							";
+							
+							$sentData = $con->prepare($sql);
+							$sentData->execute();
+						
+					}else if($_GET['select'] == 'department'){
+						
+						$deptnoErr = $dnameErr = $locErr = "";
+						
+						echo "
+							<div class='mt-5'>
+							<form method ='post'>
+								<label for='deptnoInput'>Department number:</label><br>
+								<input type='text' id='deptnoInput' name='deptnoInput'>
+								<span class='error'>* <?php echo $deptnoErr;?></span><br>
+	
+								<label for='dnameInput'>Department name:</label><br>
+								<input type='text' id='dnameInput' name='dnameInput'>
+								<span class='error'>* <?php echo $dnameErr;?></span><br>
+	
+								<label for='locInput'>Location:</label><br>
+								<input type='text' id='locInput' name='locInput'>
+								<span class='error'>* <?php echo $locErr;?></span><br>
+	
+								<button class='btn btn-secondary mb-5' name='submit' type='submit'>+ Add Row</button>
+								</form>
+							</div>
+						";
+						if(isset($_POST['submit']))
+						{
+						
+							if ($_SERVER["REQUEST_METHOD"] == "POST") {
+								if (empty($_POST["deptnoInput"])) {
+									$deptnoErr = "Department is required";
+								}
+								if (empty($_POST["dnameInput"])) {
+									$dnameErr = "Department name is required";
+								}
+								if (empty($_POST["locInput"])) {
+									$locErr = "Location is required";
+								}
+
+							}
+							
+							
+							
+							$sql = "
+							INSERT INTO Department (deptno,dname,loc) 
+							VALUES ('".$_POST['deptnoInput']."','".$_POST['dnameInput']."','".$_POST['locInput']."');
+							";
+							
+							
+							$sentData = $con->prepare($sql);
+							$sentData->execute();
+							
+						}
+					}
+				}
+
+
+				?>
 			</div>
 		<div>
 	</body>
