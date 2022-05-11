@@ -246,7 +246,7 @@
 									<span class='error'>*</span><br>
 								</div>
 	
-								<label for='comm'>Comm:</label><br>
+								<label for='comm'>Commission:</label><br>
 								<div class='d-flex justify-content-left mb-3'>
 									<input class='form-control' type='text' id='comm' name='comm'>
 									<span class='error' style='color:transparent'>*</span>
