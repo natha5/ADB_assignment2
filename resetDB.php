@@ -2,15 +2,18 @@
 
 require 'connect.php';
 
+//set necessary http headers
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST'); 
 
+//check if connected to the database
 if($con == null){
     echo json_encode(["message"=>"Could not connect to the database."]);
     return http_response_code(400);
 }
 
+//retrieve the post data and execute sql query
 $postdata = file_get_contents("php://input");
 if(isset($postdata) && !empty($postdata)){
     $json = json_decode($postdata);
